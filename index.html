@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MEDFLUX</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<div class="auth-container">
+
+  <div class="auth-card">
+
+    <div class="logo">
+      <img src="assets/Modern_X_letter_Logo-removebg-preview.png" alt="" style="width: 215px; height: 205px;">
+      <p>Plataforma Clínica Inteligente</p>
+    </div>
+
+    <!-- LOGIN -->
+
+    <div id="loginBox">
+
+      <h2>Entrar</h2>
+
+      <div class="form-group">
+        <label>E-mail</label>
+        <input type="email" id="loginEmail">
+      </div>
+
+      <div class="form-group">
+        <label>Senha</label>
+        <input type="password" id="loginPassword">
+      </div>
+
+      <button onclick="login()" class="primary-btn">
+        Entrar
+      </button>
+
+      <div class="links">
+
+        <a href="#" onclick="showRegister()">
+          Criar conta
+        </a>
+
+        <a href="#" onclick="forgotPassword()">
+          Esqueceu a senha?
+        </a>
+
+      </div>
+
+    </div>
+
+    <!-- REGISTER -->
+
+    <div id="registerBox" style="display:none;">
+
+      <h2>Criar Conta</h2>
+
+      <div class="form-group">
+        <label>Nome</label>
+        <input type="text" id="registerName">
+      </div>
+
+      <div class="form-group">
+        <label>E-mail</label>
+        <input type="email" id="registerEmail">
+      </div>
+
+      <div class="form-group">
+        <label>Senha</label>
+        <input type="password" id="registerPassword">
+      </div>
+
+      <div class="form-group">
+
+        <label>Tipo de Conta</label>
+
+        <select id="registerRole">
+
+          <option value="patient">
+            Paciente
+          </option>
+
+          <option value="doctor">
+            Médico
+          </option>
+
+        </select>
+
+      </div>
+
+      <button onclick="register()" class="primary-btn">
+        Criar Conta
+      </button>
+
+      <div class="links">
+
+        <a href="#" onclick="showLogin()">
+          Já possui conta?
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

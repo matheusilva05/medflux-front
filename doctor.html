@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Médico • MEDFLUX</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Inter',sans-serif;
+}
+
+body{
+
+  min-height:100vh;
+
+  background:
+  radial-gradient(circle at top left,#7c3aed 0%,transparent 30%),
+  radial-gradient(circle at bottom right,#2563eb 0%,transparent 35%),
+  linear-gradient(135deg,#020617 0%,#0f172a 45%,#1d4ed8 100%);
+
+  color:white;
+}
+
+.dashboard{
+  display:flex;
+  min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+
+  width:290px;
+
+  background:rgba(255,255,255,0.05);
+
+  border-right:1px solid rgba(255,255,255,0.08);
+
+  backdrop-filter:blur(30px);
+
+  padding:30px;
+}
+
+.logo h1{
+  font-size:38px;
+  font-weight:900;
+}
+
+.logo p{
+  margin-top:8px;
+  color:rgba(255,255,255,0.65);
+}
+
+.menu{
+
+  margin-top:40px;
+
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.menu button{
+
+  height:58px;
+
+  border:none;
+  border-radius:18px;
+
+  background:rgba(255,255,255,0.05);
+
+  color:white;
+
+  text-align:left;
+
+  padding:0 20px;
+
+  cursor:pointer;
+
+  transition:0.3s;
+
+  font-size:15px;
+  font-weight:600;
+}
+
+.menu button:hover{
+
+  background:rgba(59,130,246,0.25);
+
+  transform:translateX(5px);
+}
+
+/* MAIN */
+
+.main{
+  flex:1;
+  padding:40px;
+}
+
+.page{
+  display:block;
+}
+
+.hidden{
+  display:none;
+}
+
+.topbar{
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin-bottom:35px;
+}
+
+.topbar h1{
+
+  font-size:42px;
+  font-weight:900;
+}
+
+.topbar p{
+
+  margin-top:10px;
+  color:rgba(255,255,255,0.65);
+}
+
+.profile{
+
+  background:rgba(255,255,255,0.06);
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  padding:15px 22px;
+
+  border-radius:20px;
+}
+
+/* CARDS */
+
+.cards{
+
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+
+  gap:24px;
+
+  margin-bottom:35px;
+}
+
+.card{
+
+  background:rgba(255,255,255,0.06);
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  border-radius:30px;
+
+  padding:28px;
+}
+
+.card small{
+  color:rgba(255,255,255,0.65);
+}
+
+.card h2{
+
+  margin-top:15px;
+
+  font-size:36px;
+  font-weight:900;
+}
+
+/* BOXES */
+
+.box{
+
+  background:rgba(255,255,255,0.06);
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  border-radius:30px;
+
+  padding:30px;
+
+  margin-top:25px;
+}
+
+.item{
+
+  background:rgba(255,255,255,0.05);
+
+  border-radius:22px;
+
+  padding:22px;
+
+  margin-top:18px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.item p{
+
+  color:rgba(255,255,255,0.65);
+
+  margin-top:6px;
+}
+
+.status{
+
+  padding:10px 16px;
+
+  border-radius:14px;
+
+  background:rgba(34,211,238,0.15);
+
+  color:#67e8f9;
+
+  font-weight:700;
+}
+
+textarea{
+
+  width:100%;
+  height:180px;
+
+  border:none;
+  outline:none;
+
+  resize:none;
+
+  margin-top:20px;
+
+  border-radius:20px;
+
+  background:rgba(255,255,255,0.06);
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  padding:20px;
+
+  color:white;
+}
+
+.save-btn{
+
+  width:100%;
+  height:58px;
+
+  border:none;
+  border-radius:18px;
+
+  margin-top:20px;
+
+  background:linear-gradient(
+    135deg,
+    #3b82f6,
+    #22d3ee
+  );
+
+  color:white;
+
+  font-weight:700;
+
+  cursor:pointer;
+}
+
+.calendar{
+
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+
+  gap:10px;
+
+  margin-top:20px;
+}
+
+.day{
+
+  aspect-ratio:1/1;
+
+  border-radius:14px;
+
+  background:rgba(255,255,255,0.05);
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.active{
+
+  background:linear-gradient(
+    135deg,
+    #3b82f6,
+    #22d3ee
+  );
+}
+
+@media(max-width:1000px){
+
+  .dashboard{
+    flex-direction:column;
+  }
+
+  .sidebar{
+    width:100%;
+  }
+
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar">
+
+    <div class="logo">
+
+      <img src="assets/Modern_X_letter_Logo-removebg-preview.png" alt="" style="width: 215px; height: 205px;">
+      <p>Área Médica</p>
+
+    </div>
+
+    <div class="menu">
+
+      <button onclick="showPage('dashboard')">
+        Dashboard
+      </button>
+
+      <button onclick="showPage('patients')">
+        Pacientes
+      </button>
+
+      <button onclick="showPage('consultations')">
+        Consultas
+      </button>
+
+      <button onclick="showPage('records')">
+        Prontuários
+      </button>
+
+      <button onclick="showPage('agenda')">
+        Agenda
+      </button>
+
+      <button onclick="logout()">
+        Sair
+      </button>
+
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <!-- DASHBOARD -->
+
+    <section id="dashboardPage" class="page">
+
+      <div class="topbar">
+
+        <div>
+
+          <h1 id="welcomeText">
+            Bem-vindo 👨‍⚕️
+          </h1>
+
+          <p>
+            Gerencie pacientes e consultas
+          </p>
+
+        </div>
+
+        <div class="profile">
+          Médico
+        </div>
+
+      </div>
+
+      <div class="cards">
+
+        <div class="card">
+          <small>Consultas Hoje</small>
+          <h2>12</h2>
+        </div>
+
+        <div class="card">
+          <small>Pacientes</small>
+          <h2>84</h2>
+        </div>
+
+        <div class="card">
+          <small>Exames</small>
+          <h2>7</h2>
+        </div>
+
+        <div class="card">
+          <small>Finalizadas</small>
+          <h2>154</h2>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- PACIENTES -->
+
+    <section id="patientsPage" class="page hidden">
+
+      <h1>Pacientes</h1>
+
+      <div class="box">
+
+        <div class="item">
+
+          <div>
+
+            <strong>João Silva</strong>
+            <p>Cardiologia</p>
+
+          </div>
+
+          <div class="status">
+            Ativo
+          </div>
+
+        </div>
+
+        <div class="item">
+
+          <div>
+
+            <strong>Maria Oliveira</strong>
+            <p>Dermatologia</p>
+
+          </div>
+
+          <div class="status">
+            Retorno
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- CONSULTAS -->
+
+    <section id="consultationsPage" class="page hidden">
+
+      <h1>Consultas</h1>
+
+      <div class="box">
+
+        <div class="item">
+
+          <div>
+
+            <strong>09:00 • João Silva</strong>
+            <p>Consulta Online</p>
+
+          </div>
+
+          <div class="status">
+            Hoje
+          </div>
+
+        </div>
+
+        <div class="item">
+
+          <div>
+
+            <strong>11:30 • Maria Oliveira</strong>
+            <p>Presencial</p>
+
+          </div>
+
+          <div class="status">
+            Confirmada
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- PRONTUARIOS -->
+
+    <section id="recordsPage" class="page hidden">
+
+      <h1>Prontuários</h1>
+
+      <div class="box">
+
+        <strong>João Silva</strong>
+
+        <textarea placeholder="Adicionar observações médicas..."></textarea>
+
+        <button class="save-btn">
+          Salvar Prontuário
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- AGENDA -->
+
+    <section id="agendaPage" class="page hidden">
+
+      <h1>Agenda</h1>
+
+      <div class="box">
+
+        <div class="calendar" id="calendar"></div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<script>
+
+const user =
+JSON.parse(localStorage.getItem('loggedUser'));
+
+if(!user){
+
+  window.location.href='index.html';
+
+}
+
+document.getElementById('welcomeText')
+.innerText=`Bem-vindo, Dr(a). ${user.name} 👨‍⚕️`;
+
+function showPage(page){
+
+  const pages=
+  document.querySelectorAll('.page');
+
+  pages.forEach(p=>{
+
+    p.classList.add('hidden');
+
+  });
+
+  document
+  .getElementById(page+'Page')
+  .classList.remove('hidden');
+
+}
+
+/* CALENDAR */
+
+const calendar=
+document.getElementById('calendar');
+
+for(let i=1;i<=31;i++){
+
+  const day=document.createElement('div');
+
+  day.classList.add('day');
+
+  day.innerText=i;
+
+  if(i===5 || i===14 || i===22){
+
+    day.classList.add('active');
+
+  }
+
+  calendar.appendChild(day);
+
+}
+
+function logout(){
+
+  localStorage.removeItem('loggedUser');
+
+  window.location.href='index.html';
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Área do Paciente • MEDFLUX</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Inter',sans-serif;
+}
+
+body{
+
+  min-height:100vh;
+
+  background:
+  radial-gradient(circle at top left,#7c3aed 0%,transparent 30%),
+  radial-gradient(circle at bottom right,#2563eb 0%,transparent 35%),
+  linear-gradient(135deg,#020617 0%,#0f172a 45%,#1d4ed8 100%);
+
+  color:white;
+}
+
+/* DASHBOARD */
+
+.dashboard{
+  display:flex;
+  min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+
+  width:290px;
+
+  background:rgba(255,255,255,0.05);
+
+  border-right:1px solid rgba(255,255,255,0.08);
+
+  backdrop-filter:blur(30px);
+
+  padding:30px;
+}
+
+.logo h1{
+  font-size:38px;
+  font-weight:900;
+}
+
+.logo p{
+  margin-top:8px;
+  color:rgba(255,255,255,0.65);
+}
+
+.menu{
+
+  margin-top:40px;
+
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.menu button{
+
+  height:58px;
+
+  border:none;
+  border-radius:18px;
+
+  background:rgba(255,255,255,0.05);
+
+  color:white;
+
+  text-align:left;
+
+  padding:0 20px;
+
+  cursor:pointer;
+
+  transition:0.3s;
+}
+
+.menu button:hover{
+
+  background:rgba(59,130,246,0.25);
+
+  transform:translateX(5px);
+}
+
+/* MAIN */
+
+.main{
+  flex:1;
+  padding:40px;
+}
+
+/* TOPBAR */
+
+.topbar{
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin-bottom:35px;
+}
+
+.welcome h1{
+
+  font-size:42px;
+  font-weight:900;
+}
+
+.welcome p{
+
+  margin-top:10px;
+  color:rgba(255,255,255,0.65);
+}
+
+.profile{
+
+  background:rgba(255,255,255,0.06);
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  padding:15px 22px;
+
+  border-radius:20px;
+}
+
+/* CARDS */
+
+.cards{
+
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+
+  gap:24px;
+
+  margin-bottom:35px;
+}
+
+.card{
+
+  background:rgba(255,255,255,0.06);
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  backdrop-filter:blur(20px);
+
+  border-radius:30px;
+
+  padding:28px;
+}
+
+.card small{
+  color:rgba(255,255,255,0.65);
+}
+
+.card h2{
+
+  margin-top:15px;
+
+  font-size:36px;
+  font-weight:900;
+}
+
+/* CONTENT */
+
+.content{
+
+  display:grid;
+  grid-template-columns:2fr 1fr;
+
+  gap:24px;
+}
+
+/* CONSULTAS */
+
+.consultas{
+
+  background:rgba(255,255,255,0.06);
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  border-radius:30px;
+
+  padding:30px;
+}
+
+.consultas-top{
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin-bottom:25px;
+}
+
+.consultas-top button{
+
+  height:56px;
+
+  border:none;
+  border-radius:18px;
+
+  padding:0 22px;
+
+  background:linear-gradient(
+    135deg,
+    #3b82f6,
+    #22d3ee
+  );
+
+  color:white;
+
+  font-weight:700;
+
+  cursor:pointer;
+}
+
+.consulta-item{
+
+  background:rgba(255,255,255,0.05);
+
+  border:1px solid rgba(255,255,255,0.05);
+
+  border-radius:24px;
+
+  padding:22px;
+
+  margin-bottom:16px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.consulta-item p{
+
+  color:rgba(255,255,255,0.65);
+
+  margin-top:5px;
+}
+
+.status{
+
+  padding:10px 16px;
+
+  border-radius:14px;
+
+  background:rgba(34,211,238,0.15);
+
+  color:#67e8f9;
+
+  font-weight:700;
+}
+
+/* CALENDAR */
+
+.calendar-box{
+
+  background:rgba(255,255,255,0.06);
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  border-radius:30px;
+
+  padding:30px;
+}
+
+.calendar{
+
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+
+  gap:10px;
+
+  margin-top:20px;
+}
+
+.day{
+
+  aspect-ratio:1/1;
+
+  border-radius:14px;
+
+  background:rgba(255,255,255,0.05);
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.active-day{
+
+  background:linear-gradient(
+    135deg,
+    #3b82f6,
+    #22d3ee
+  );
+}
+
+/* MODAL */
+
+.modal{
+
+  position:fixed;
+  inset:0;
+
+  background:rgba(0,0,0,0.5);
+
+  display:none;
+  justify-content:center;
+  align-items:center;
+
+  z-index:999;
+}
+
+.modal-content{
+
+  width:100%;
+  max-width:520px;
+
+  background:#0f172a;
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  border-radius:30px;
+
+  padding:35px;
+}
+
+.modal-content h2{
+
+  margin-bottom:25px;
+}
+
+.form-group{
+
+  margin-bottom:20px;
+}
+
+.form-group label{
+
+  display:block;
+  margin-bottom:10px;
+}
+
+.form-group select,
+.form-group input{
+
+  width:100%;
+  height:58px;
+
+  border:none;
+  outline:none;
+
+  border-radius:18px;
+
+  background:rgba(255,255,255,0.06);
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  padding:0 18px;
+
+  color:white;
+}
+
+option{
+  color:black;
+}
+
+.modal button{
+
+  width:100%;
+  height:58px;
+
+  border:none;
+  border-radius:18px;
+
+  margin-top:10px;
+
+  background:linear-gradient(
+    135deg,
+    #3b82f6,
+    #22d3ee
+  );
+
+  color:white;
+
+  font-weight:700;
+
+  cursor:pointer;
+}
+
+.close-btn{
+
+  background:rgba(255,255,255,0.08) !important;
+}
+
+@media(max-width:1000px){
+
+  .dashboard{
+    flex-direction:column;
+  }
+
+  .sidebar{
+    width:100%;
+  }
+
+  .content{
+    grid-template-columns:1fr;
+  }
+
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar">
+
+    <div class="logo">
+
+      <img src="assets/Modern_X_letter_Logo-removebg-preview.png" alt="" style="width: 215px; height: 205px;">
+      <p>Área do Paciente</p>
+
+    </div>
+
+    <div class="menu">
+
+      <button>
+        Dashboard
+      </button>
+
+      <button onclick="openModal()">
+        Agendar Consulta
+      </button>
+
+      <button>
+        Minhas Consultas
+      </button>
+
+      <button>
+        Exames
+      </button>
+
+      <button>
+        Histórico
+      </button>
+
+      <button onclick="logout()">
+        Sair
+      </button>
+
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <!-- TOPBAR -->
+
+    <div class="topbar">
+
+      <div class="welcome">
+
+        <h1 id="welcomeText">
+          Bem-vindo 👋
+        </h1>
+
+        <p>
+          Gerencie suas consultas e exames
+        </p>
+
+      </div>
+
+      <div class="profile">
+        Paciente
+      </div>
+
+    </div>
+
+    <!-- CARDS -->
+
+    <section class="cards">
+
+      <div class="card">
+
+        <small>Próxima Consulta</small>
+
+        <h2 id="nextConsult">
+          Nenhuma
+        </h2>
+
+      </div>
+
+      <div class="card">
+
+        <small>Consultas no mês</small>
+
+        <h2 id="monthConsults">
+          0
+        </h2>
+
+      </div>
+
+      <div class="card">
+
+        <small>Exames Pendentes</small>
+
+        <h2>
+          2
+        </h2>
+
+      </div>
+
+      <div class="card">
+
+        <small>Consultas Realizadas</small>
+
+        <h2 id="doneConsults">
+          0
+        </h2>
+
+      </div>
+
+    </section>
+
+    <!-- CONTENT -->
+
+    <section class="content">
+
+      <!-- CONSULTAS -->
+
+      <div class="consultas">
+
+        <div class="consultas-top">
+
+          <h2>Próximas Consultas</h2>
+
+          <button onclick="openModal()">
+            + Agendar
+          </button>
+
+        </div>
+
+        <div id="consultasContainer">
+
+          <p style="color:rgba(255,255,255,0.65)">
+            Nenhuma consulta marcada
+          </p>
+
+        </div>
+
+      </div>
+
+      <!-- CALENDAR -->
+
+      <div class="calendar-box">
+
+        <h2>Calendário</h2>
+
+        <div class="calendar" id="calendar"></div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<!-- MODAL -->
+
+<div class="modal" id="modal">
+
+  <div class="modal-content">
+
+    <h2>Agendar Consulta</h2>
+
+    <div class="form-group">
+
+      <label>Especialidade</label>
+
+      <select id="speciality">
+
+        <option>Cardiologia</option>
+        <option>Dermatologia</option>
+        <option>Neurologia</option>
+        <option>Pediatria</option>
+        <option>Ortopedia</option>
+
+      </select>
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Médico</label>
+
+      <select id="doctor">
+
+        <option>Dr. Lucas Almeida</option>
+        <option>Dra. Fernanda Costa</option>
+        <option>Dr. Rafael Martins</option>
+
+      </select>
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Tipo de Consulta</label>
+
+      <select id="type">
+
+        <option>Online</option>
+        <option>Presencial</option>
+
+      </select>
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Data</label>
+
+      <input type="date" id="date">
+
+    </div>
+
+    <div class="form-group">
+
+      <label>Horário</label>
+
+      <input type="time" id="time">
+
+    </div>
+
+    <button onclick="scheduleConsultation()">
+      Confirmar Consulta
+    </button>
+
+    <button onclick="closeModal()" class="close-btn">
+      Fechar
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+/* USER */
+
+const user =
+JSON.parse(localStorage.getItem('loggedUser'));
+
+if(!user){
+
+  window.location.href='index.html';
+
+}
+
+document.getElementById('welcomeText')
+.innerText=`Bem-vindo, ${user.name} 👋`;
+
+/* CALENDAR */
+
+const calendar =
+document.getElementById('calendar');
+
+for(let i=1;i<=31;i++){
+
+  const day=document.createElement('div');
+
+  day.classList.add('day');
+
+  day.innerText=i;
+
+  if(i===12 || i===21){
+
+    day.classList.add('active-day');
+
+  }
+
+  calendar.appendChild(day);
+
+}
+
+/* MODAL */
+
+function openModal(){
+
+  document.getElementById('modal')
+  .style.display='flex';
+
+}
+
+function closeModal(){
+
+  document.getElementById('modal')
+  .style.display='none';
+
+}
+
+/* CONSULTAS */
+
+function scheduleConsultation(){
+
+  const speciality =
+  document.getElementById('speciality').value;
+
+  const doctor =
+  document.getElementById('doctor').value;
+
+  const type =
+  document.getElementById('type').value;
+
+  const date =
+  document.getElementById('date').value;
+
+  const time =
+  document.getElementById('time').value;
+
+  if(!date || !time){
+
+    alert('Preencha todos os campos');
+    return;
+
+  }
+
+  const consultations =
+  JSON.parse(localStorage.getItem('consultations')) || [];
+
+  consultations.push({
+
+    speciality,
+    doctor,
+    type,
+    date,
+    time
+
+  });
+
+  localStorage.setItem(
+    'consultations',
+    JSON.stringify(consultations)
+  );
+
+  loadConsultations();
+
+  closeModal();
+
+}
+
+/* LOAD */
+
+function loadConsultations(){
+
+  const consultations =
+  JSON.parse(localStorage.getItem('consultations')) || [];
+
+  const container =
+  document.getElementById('consultasContainer');
+
+  if(consultations.length===0){
+
+    container.innerHTML=`
+
+      <p style="color:rgba(255,255,255,0.65)">
+        Nenhuma consulta marcada
+      </p>
+
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML='';
+
+  consultations.forEach(c=>{
+
+    container.innerHTML+=`
+
+      <div class="consulta-item">
+
+        <div>
+
+          <strong>${c.speciality}</strong>
+
+          <p>${c.doctor}</p>
+
+          <p>
+            ${c.date} • ${c.time}
+          </p>
+
+        </div>
+
+        <div class="status">
+          ${c.type}
+        </div>
+
+      </div>
+
+    `;
+
+  });
+
+  document.getElementById('monthConsults')
+  .innerText=consultations.length;
+
+  document.getElementById('doneConsults')
+  .innerText=consultations.length;
+
+  const first = consultations[0];
+
+  document.getElementById('nextConsult')
+  .innerText=`${first.date}`;
+
+}
+
+loadConsultations();
+
+/* LOGOUT */
+
+function logout(){
+
+  localStorage.removeItem('loggedUser');
+
+  window.location.href='index.html';
+
+}
+
+</script>
+
+</body>
+</html>
