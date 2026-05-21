@@ -3,16 +3,16 @@
 const user =
 JSON.parse(localStorage.getItem('loggedUser'));
 
-if (!user) {
+if(!user){
 
-  window.location.href = 'index.html';
+  window.location.href='index.html';
 
 }
 
 document.getElementById('welcomeText')
 .innerText = `Bem-vindo, ${user.name} 👋`;
 
-/* HORÁRIOS DISPONÍVEIS */
+/* HORÁRIOS */
 
 const availableTimes = [
 
@@ -33,15 +33,16 @@ const availableTimes = [
 const calendar =
 document.getElementById('calendar');
 
-for (let i = 1; i <= 31; i++) {
+for(let i=1;i<=31;i++){
 
-  const day = document.createElement('div');
+  const day =
+  document.createElement('div');
 
   day.classList.add('day');
 
   day.innerText = i;
 
-  if (i === 12 || i === 21) {
+  if(i===12 || i===21){
 
     day.classList.add('active-day');
 
@@ -51,9 +52,9 @@ for (let i = 1; i <= 31; i++) {
 
 }
 
-/* LOAD AVAILABLE TIMES */
+/* LOAD TIMES */
 
-function loadAvailableTimes() {
+function loadAvailableTimes(){
 
   const select =
   document.getElementById('time');
@@ -76,7 +77,7 @@ function loadAvailableTimes() {
 
     );
 
-    if (!occupied) {
+    if(!occupied){
 
       select.innerHTML += `
 
@@ -98,52 +99,101 @@ document
 
 /* MODAL */
 
-function openModal() {
+function openModal(){
 
   document.getElementById('modal')
-  .style.display = 'flex';
+  .style.display='flex';
 
 }
 
-function closeModal() {
+function closeModal(){
 
   document.getElementById('modal')
-  .style.display = 'none';
+  .style.display='none';
 
 }
 
-/* HISTÓRICO */
+/* AGENDAR */
 
-function openHistorico() {
+function scheduleConsultation(){
 
-  document.getElementById('historicoModal')
-  .style.display = 'flex';
+  const speciality =
+  document.getElementById('speciality').value;
 
-  loadHistorico();
+  const doctor =
+  document.getElementById('doctor').value;
 
-}
+  const type =
+  document.getElementById('type').value;
 
-function closeHistorico() {
+  const date =
+  document.getElementById('date').value;
 
-  document.getElementById('historicoModal')
-  .style.display = 'none';
+  const time =
+  document.getElementById('time').value;
 
-}
+  if(!date || !time){
 
-function loadHistorico() {
+    showToast('Preencha todos os campos');
+
+    return;
+
+  }
 
   const consultations =
   JSON.parse(localStorage.getItem('consultations')) || [];
 
-  const container =
-  document.getElementById('historicoContainer');
+  consultations.push({
 
-  if (consultations.length === 0) {
+    patient:user.name,
+    speciality,
+    doctor,
+    type,
+    date,
+    time,
+    status:'Agendada'
+
+  });
+
+  localStorage.setItem(
+
+    'consultations',
+
+    JSON.stringify(consultations)
+
+  );
+
+  showToast('Consulta agendada');
+
+  loadConsultations();
+
+  closeModal();
+
+}
+
+/* LOAD CONSULTATIONS */
+
+function loadConsultations(){
+
+  const consultations =
+  JSON.parse(localStorage.getItem('consultations')) || [];
+
+  const userConsultations =
+  consultations.filter(c =>
+
+    c.patient === user.name
+
+  );
+
+  const container =
+  document.getElementById('consultasContainer');
+
+  if(userConsultations.length === 0){
 
     container.innerHTML = `
 
       <p style="color:rgba(255,255,255,0.65)">
-        Nenhum histórico encontrado
+        Nenhuma consulta marcada
       </p>
 
     `;
@@ -152,21 +202,155 @@ function loadHistorico() {
 
   }
 
-  container.innerHTML = '';
+  container.innerHTML='';
 
-  consultations.forEach(c => {
+  userConsultations.forEach((c,index)=>{
+
+    container.innerHTML += `
+
+      <div class="consulta-item">
+
+        <div>
+
+          <strong>${c.speciality}</strong>
+
+          <p>👨‍⚕️ ${c.doctor}</p>
+
+          <p>
+            📅 ${formatDate(c.date)} • ⏰ ${c.time}
+          </p>
+
+        </div>
+
+        <div class="consult-right">
+
+          <div class="status">
+            ${c.status}
+          </div>
+
+          <button
+            class="cancel-btn"
+            onclick="cancelConsultation(${index})"
+          >
+            Cancelar
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  });
+
+  document.getElementById('monthConsults')
+  .innerText = userConsultations.length;
+
+  document.getElementById('doneConsults')
+  .innerText = userConsultations.length;
+
+  document.getElementById('nextConsult')
+  .innerText =
+  formatDate(userConsultations[0].date);
+
+}
+
+/* CANCELAR */
+
+function cancelConsultation(index){
+
+  let consultations =
+  JSON.parse(localStorage.getItem('consultations')) || [];
+
+  const userConsultations =
+  consultations.filter(c =>
+
+    c.patient === user.name
+
+  );
+
+  const consultation =
+  userConsultations[index];
+
+  consultations =
+  consultations.filter(c =>
+
+    !(
+      c.patient === consultation.patient &&
+      c.date === consultation.date &&
+      c.time === consultation.time
+    )
+
+  );
+
+  localStorage.setItem(
+
+    'consultations',
+
+    JSON.stringify(consultations)
+
+  );
+
+  showToast('Consulta cancelada');
+
+  loadConsultations();
+
+}
+
+/* HISTÓRICO */
+
+function openHistorico(){
+
+  document.getElementById('historicoModal')
+  .style.display='flex';
+
+  loadHistorico();
+
+}
+
+function closeHistorico(){
+
+  document.getElementById('historicoModal')
+  .style.display='none';
+
+}
+
+function loadHistorico(){
+
+  const consultations =
+  JSON.parse(localStorage.getItem('consultations')) || [];
+
+  const userConsultations =
+  consultations.filter(c =>
+
+    c.patient === user.name
+
+  );
+
+  const container =
+  document.getElementById('historicoContainer');
+
+  if(userConsultations.length===0){
+
+    container.innerHTML=`
+      <p>Nenhum histórico encontrado</p>
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML='';
+
+  userConsultations.forEach(c=>{
 
     container.innerHTML += `
 
       <div class="historico-item">
 
-        <h3>
-          ${c.speciality}
-        </h3>
+        <h3>${c.speciality}</h3>
 
-        <p>
-          👨‍⚕️ ${c.doctor}
-        </p>
+        <p>👨‍⚕️ ${c.doctor}</p>
 
         <p>
           📅 ${formatDate(c.date)}
@@ -176,12 +360,8 @@ function loadHistorico() {
           ⏰ ${c.time}
         </p>
 
-        <p>
-          💻 ${c.type}
-        </p>
-
         <div class="historico-status">
-          Consulta Registrada
+          ${c.status}
         </div>
 
       </div>
@@ -192,72 +372,58 @@ function loadHistorico() {
 
 }
 
-/* DASHBOARD */
+/* EXAMES */
 
-function openDashboard() {
+function openExames(){
 
-  window.scrollTo({
-
-    top: 0,
-    behavior: 'smooth'
-
-  });
-
-  document.querySelector('.cards')
-  .classList.add('dashboard-highlight');
-
-  setTimeout(() => {
-
-    document.querySelector('.cards')
-    .classList.remove('dashboard-highlight');
-
-  }, 2000);
+  document.getElementById('examesModal')
+  .style.display='flex';
 
 }
 
-/* MINHAS CONSULTAS */
+function closeExames(){
 
-function openMinhasConsultas() {
+  document.getElementById('examesModal')
+  .style.display='none';
+
+}
+
+/* CONSULTAS */
+
+function openMinhasConsultas(){
 
   document.getElementById('consultasModal')
-  .style.display = 'flex';
+  .style.display='flex';
 
   loadMinhasConsultas();
 
 }
 
-function closeMinhasConsultas() {
+function closeMinhasConsultas(){
 
   document.getElementById('consultasModal')
-  .style.display = 'none';
+  .style.display='none';
 
 }
 
-function loadMinhasConsultas() {
+function loadMinhasConsultas(){
 
   const consultations =
   JSON.parse(localStorage.getItem('consultations')) || [];
 
+  const userConsultations =
+  consultations.filter(c =>
+
+    c.patient === user.name
+
+  );
+
   const container =
   document.getElementById('minhasConsultasContainer');
 
-  if (consultations.length === 0) {
+  container.innerHTML='';
 
-    container.innerHTML = `
-
-      <p style="color:rgba(255,255,255,0.65)">
-        Nenhuma consulta encontrada
-      </p>
-
-    `;
-
-    return;
-
-  }
-
-  container.innerHTML = '';
-
-  consultations.forEach(c => {
+  userConsultations.forEach(c=>{
 
     container.innerHTML += `
 
@@ -265,9 +431,7 @@ function loadMinhasConsultas() {
 
         <h3>${c.speciality}</h3>
 
-        <p>
-          👨‍⚕️ ${c.doctor}
-        </p>
+        <p>👨‍⚕️ ${c.doctor}</p>
 
         <p>
           📅 ${formatDate(c.date)}
@@ -289,243 +453,9 @@ function loadMinhasConsultas() {
 
 }
 
-/* EXAMES */
-
-function openExames() {
-
-  document.getElementById('examesModal')
-  .style.display = 'flex';
-
-}
-
-function closeExames() {
-
-  document.getElementById('examesModal')
-  .style.display = 'none';
-
-}
-
-/* AGENDAR CONSULTA */
-
-function scheduleConsultation() {
-
-  const speciality =
-  document.getElementById('speciality').value;
-
-  const doctor =
-  document.getElementById('doctor').value;
-
-  const type =
-  document.getElementById('type').value;
-
-  const date =
-  document.getElementById('date').value;
-
-  const time =
-  document.getElementById('time').value;
-
-  if (!date || !time) {
-
-    showToast('Preencha todos os campos');
-
-    return;
-
-  }
-
-  const consultations =
-  JSON.parse(localStorage.getItem('consultations')) || [];
-
-  consultations.push({
-
-    speciality,
-    doctor,
-    type,
-    date,
-    time
-
-  });
-
-  localStorage.setItem(
-
-    'consultations',
-
-    JSON.stringify(consultations)
-
-  );
-
-  backupConsultations();
-
-  sendReminder({
-
-    date,
-    time
-
-  });
-
-  showToast('Consulta agendada com sucesso');
-
-  loadConsultations();
-
-  closeModal();
-
-}
-
-/* LOAD CONSULTATIONS */
-
-function loadConsultations() {
-
-  const consultations =
-  JSON.parse(localStorage.getItem('consultations')) || [];
-
-  consultations.sort((a, b) => {
-
-    return new Date(a.date) - new Date(b.date);
-
-  });
-
-  const container =
-  document.getElementById('consultasContainer');
-
-  if (consultations.length === 0) {
-
-    container.innerHTML = `
-
-      <p style="color:rgba(255,255,255,0.65)">
-        Nenhuma consulta marcada
-      </p>
-
-    `;
-
-    return;
-
-  }
-
-  container.innerHTML = '';
-
-  consultations.forEach((c, index) => {
-
-    container.innerHTML += `
-
-      <div class="consulta-item">
-
-        <div>
-
-          <strong>${c.speciality}</strong>
-
-          <p>${c.doctor}</p>
-
-          <p>
-            ${formatDate(c.date)} • ${c.time}
-          </p>
-
-        </div>
-
-        <div style="display:flex; gap:10px; align-items:center;">
-
-          <div class="status">
-            ${c.type}
-          </div>
-
-          <button
-            onclick="cancelConsultation(${index})"
-            class="cancel-btn"
-          >
-            Cancelar
-          </button>
-
-        </div>
-
-      </div>
-
-    `;
-
-  });
-
-  document.getElementById('monthConsults')
-  .innerText = consultations.length;
-
-  document.getElementById('doneConsults')
-  .innerText = consultations.length;
-
-  const first = consultations[0];
-
-  document.getElementById('nextConsult')
-  .innerText = formatDate(first.date);
-
-}
-
-/* CANCELAR CONSULTA */
-
-function cancelConsultation(index) {
-
-  const consultations =
-  JSON.parse(localStorage.getItem('consultations')) || [];
-
-  const confirmCancel =
-  confirm('Deseja cancelar esta consulta?');
-
-  if (!confirmCancel) return;
-
-  consultations.splice(index, 1);
-
-  localStorage.setItem(
-
-    'consultations',
-
-    JSON.stringify(consultations)
-
-  );
-
-  backupConsultations();
-
-  loadConsultations();
-
-  showToast('Consulta cancelada');
-
-}
-
-/* LEMBRETE */
-
-function sendReminder(consultation) {
-
-  setTimeout(() => {
-
-    showToast(
-
-      `Lembrete: consulta às ${consultation.time}`
-
-    );
-
-  }, 5000);
-
-}
-
-/* BACKUP */
-
-function backupConsultations() {
-
-  const consultations =
-  JSON.parse(localStorage.getItem('consultations')) || [];
-
-  localStorage.setItem(
-
-    'consultations_backup',
-
-    JSON.stringify({
-
-      backupDate: new Date(),
-
-      data: consultations
-
-    })
-
-  );
-
-}
-
 /* TOAST */
 
-function showToast(message) {
+function showToast(message){
 
   const toast =
   document.getElementById('toast');
@@ -534,17 +464,17 @@ function showToast(message) {
 
   toast.classList.add('show');
 
-  setTimeout(() => {
+  setTimeout(()=>{
 
     toast.classList.remove('show');
 
-  }, 3000);
+  },3000);
 
 }
 
 /* FORMAT DATE */
 
-function formatDate(date) {
+function formatDate(date){
 
   return new Date(date)
   .toLocaleDateString('pt-BR');
@@ -553,11 +483,11 @@ function formatDate(date) {
 
 /* LOGOUT */
 
-function logout() {
+function logout(){
 
   localStorage.removeItem('loggedUser');
 
-  window.location.href = 'index.html';
+  window.location.href='index.html';
 
 }
 
